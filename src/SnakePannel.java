@@ -62,12 +62,25 @@ public class SnakePannel extends JPanel implements ActionListener {
     
     public void snakeStart() {
         newApple();
+        newSnake();
+        snakeLength = 3;
+        gameOver = false;
+        direction = 'R';
         timer.start();
     }
 
     public void newApple() {
         appleX = random.nextInt(WIDTH/DIMENTION)*DIMENTION;
         appleY = random.nextInt(HEIGHT/DIMENTION)*DIMENTION;
+    }
+
+    public void newSnake() {
+        snakePixelX[0] = 3*DIMENTION;
+        snakePixelY[0] = 4*DIMENTION; 
+        snakePixelX[1] = 3*DIMENTION;
+        snakePixelY[1] = 5*DIMENTION;
+        snakePixelX[2] = 3*DIMENTION;
+        snakePixelY[2] = 6*DIMENTION; 
     }
 
     public void moving() {
@@ -99,7 +112,10 @@ public class SnakePannel extends JPanel implements ActionListener {
     }
 
     public void checkDying() {
-
+        for(int i = snakeLength-1; i > 0; i--) {
+            if(snakePixelX[0] == snakePixelX[i] && snakePixelY[0] == snakePixelY[i])
+                gameOver = true;
+        }
     }
     
     @Override
@@ -108,6 +124,9 @@ public class SnakePannel extends JPanel implements ActionListener {
             moving();
             checkEating();
             checkDying();
+        } else {
+            timer.stop();
+            snakeStart();
         }
         repaint();
     }
@@ -117,22 +136,6 @@ public class SnakePannel extends JPanel implements ActionListener {
 
         public void keyPressed(KeyEvent e){
             switch(e.getKeyCode()) {
-                case KeyEvent.VK_W :
-                    if(direction != 'D')
-                        direction = 'U';
-                    break;
-                case KeyEvent.VK_A:
-                    if(direction != 'R')
-                        direction = 'L';
-                    break;
-                case KeyEvent.VK_S:
-                    if(direction != 'U')
-                        direction = 'D';
-                    break;
-                case KeyEvent.VK_D:
-                    if(direction != 'L') 
-                        direction = 'R';
-                    break;
                 case KeyEvent.VK_UP :
                     if(direction != 'D')
                         direction = 'U';
