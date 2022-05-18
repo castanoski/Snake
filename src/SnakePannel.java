@@ -5,11 +5,11 @@ import java.util.Random;
 
 public class SnakePannel extends JPanel implements ActionListener {
     
-    static final int HEIGHT = 600;      //must be divided by dimention
+    static final int HEIGHT = 510;      //must be divided by dimention
     static final int WIDTH = 600;       //must be divided by dimention
     static final int DIMENTION = 30;    //must be divided by 15
     static final int NUMBER_OF_PIXEL = (HEIGHT*WIDTH)/(DIMENTION*DIMENTION);
-    static final int SPEED = 100;
+    static final int SPEED = 200;
     int snakeLength = 3;
     char direction = 'R';
     boolean gameOver = false;
@@ -37,9 +37,8 @@ public class SnakePannel extends JPanel implements ActionListener {
     }
 
     public void draw(Graphics g) {
-        g.setColor(new Color(27, 30, 50));
-
         //stampa delle linee guida
+        g.setColor(new Color(10, 10, 20));
         for(int i = 0; i < WIDTH/DIMENTION; i++)
             g.drawLine(i*DIMENTION, 0, i*DIMENTION, HEIGHT);
         for(int i = 0; i < HEIGHT/DIMENTION; i++)
@@ -48,7 +47,7 @@ public class SnakePannel extends JPanel implements ActionListener {
         //stampa della apple
             g.setColor(Color.YELLOW);
             g.fillRect(appleX, appleY, DIMENTION, DIMENTION);
-            g.setColor(new Color(random.nextInt(50)+205,random.nextInt(50)+205, random.nextInt(60)+100));
+            g.setColor(new Color(random.nextInt(50)+205,random.nextInt(50)+180, random.nextInt(60)+90));
             g.fillRect(appleX+(DIMENTION/5), appleY+(DIMENTION/5), 3*(DIMENTION/5), 3*(DIMENTION/5));
 
         //stampa del serpente
@@ -91,15 +90,23 @@ public class SnakePannel extends JPanel implements ActionListener {
         switch(direction){
             case 'R':
                 snakePixelX[0] += DIMENTION;
+                if(snakePixelX[0] == WIDTH)
+                    snakePixelX[0] = 0;
                 break;
             case 'L':
                 snakePixelX[0] -= DIMENTION;
+                if(snakePixelX[0] == -DIMENTION)
+                    snakePixelX[0] = WIDTH-DIMENTION;
                 break;
             case 'U':
                 snakePixelY[0] -= DIMENTION;
+                if(snakePixelY[0] == -DIMENTION)
+                    snakePixelY[0] = HEIGHT-DIMENTION;
                 break;
             case 'D':
                 snakePixelY[0] += DIMENTION;
+                if(snakePixelY[0] == HEIGHT)
+                    snakePixelY[0] = 0;
                 break;
         }   
     }
@@ -131,7 +138,7 @@ public class SnakePannel extends JPanel implements ActionListener {
         repaint();
     }
 
-    //aggiungi controlli sul pezzo precedente, non sulla direzione
+    //AGGIUNGI CONTROLLI SU SNAKEPIXELX[1]
     public class Keyboard extends KeyAdapter {
 
         public void keyPressed(KeyEvent e){
