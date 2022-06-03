@@ -9,7 +9,7 @@ public class SnakePannel extends JPanel implements ActionListener {
     static final int WIDTH = 600;       //must be divided by dimention
     static final int DIMENTION = 30;    //must be divided by 15
     static final int NUMBER_OF_PIXEL = (HEIGHT*WIDTH)/(DIMENTION*DIMENTION);
-    static final int SPEED = 200;
+    static final int SPEED = 100;
     int snakeLength = 3;
     char direction = 'R';
     boolean gameOver = false;
@@ -19,6 +19,7 @@ public class SnakePannel extends JPanel implements ActionListener {
     int appleY;
     Timer timer;
     Random random;
+    int best;
 
 
     SnakePannel() {
@@ -57,6 +58,12 @@ public class SnakePannel extends JPanel implements ActionListener {
             g.setColor(new Color(random.nextInt(80)+130,0,0));
             g.fillRect(snakePixelX[i]+(DIMENTION/15), snakePixelY[i]+(DIMENTION/15), 13*(DIMENTION/15), 13*(DIMENTION/15));
         }
+
+        //stampa punteggio e best
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("serif", Font.ITALIC, 40));
+        g.drawString("Score : " + (snakeLength - 3), 0, DIMENTION);
+        g.drawString("Best : " + best, 0, 2*DIMENTION);
     }
     
     public void snakeStart() {
@@ -115,6 +122,9 @@ public class SnakePannel extends JPanel implements ActionListener {
         if(snakePixelX[0] == appleX && snakePixelY[0] == appleY) {
             snakeLength++;
             newApple();
+            if(best < snakeLength - 3) {
+                best = snakeLength - 3;
+            }
         }
     }
 
@@ -144,19 +154,19 @@ public class SnakePannel extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e){
             switch(e.getKeyCode()) {
                 case KeyEvent.VK_UP :
-                    if(direction != 'D')
+                    if(snakePixelY[0] != snakePixelY[1] + DIMENTION && !(snakePixelY[0] == 0 && direction == 'D'))
                         direction = 'U';
                     break;
                 case KeyEvent.VK_LEFT:
-                    if(direction != 'R')
+                    if(snakePixelX[0] != snakePixelX[1] + DIMENTION && !(snakePixelX[0] == 0 && direction == 'R'))
                         direction = 'L';
                     break;
                 case KeyEvent.VK_DOWN:
-                    if(direction != 'U')
+                    if(snakePixelY[0] != snakePixelY[1] - DIMENTION && !(snakePixelY[0] == HEIGHT-DIMENTION && direction == 'U'))
                         direction = 'D';
                     break;
                 case KeyEvent.VK_RIGHT:
-                    if(direction != 'L') 
+                    if(snakePixelX[0] != snakePixelX[1] - DIMENTION && !(snakePixelX[0] == WIDTH-DIMENTION && direction == 'L')) 
                         direction = 'R';
                     break;
             }
